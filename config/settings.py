@@ -201,3 +201,39 @@ if not DEBUG:
     # SECURE_SSL_REDIRECT, SESSION_COOKIE_SECURE y CSRF_COOKIE_SECURE se
     # activan automáticamente más arriba cuando se detecta RENDER_EXTERNAL_HOSTNAME
     # (o pueden forzarse a mano si sirves la app detrás de HTTPS en otra plataforma).
+
+# ---------------------------------------------------------------------------
+# Logging
+#
+# Por defecto, con DEBUG=False, Django intenta mandar los errores 500 por
+# email a ADMINS en vez de imprimirlos — como no hay servidor de correo
+# configurado, ese intento falla en silencio y el error desaparece sin dejar
+# rastro. Forzamos que todo (incluido el traceback de excepciones no
+# controladas) se imprima por consola, que es lo que Render/Docker capturan
+# como logs del contenedor.
+# ---------------------------------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
