@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de control — SecurePass{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Tus contraseñas guardadas</h1>
+    <a href="{% url 'add_password' %}" class="btn btn-primary">+ Añadir contraseña</a>
+</div>
+
+{% if stored_passwords %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle securepass-table">
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Usuario / Correo</th>
+                <th>Contraseña</th>
+                <th>Fortaleza</th>
+                <th>Creada</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in stored_passwords %}
+            <tr data-reveal-url="{% url 'reveal_password' item.pk %}">
+                <td class="fw-semibold">{{ item.site_name }}</td>
+                <td>{{ item.username_or_email }}</td>
+                <td>
+                    <span class="password-cell font-monospace">••••••••</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-reveal ms-2" title="Mostrar / ocultar">
+                        👁
+                    </button>
+                </td>
+                <td style="min-width: 140px;">
+                    <div class="strength-bar strength-{{ item.strength_score }}">
+                        <div class="strength-bar-fill"></div>
+                    </div>
+                    <small class="text-muted">{{ item.strength_label }}</small>
+                </td>
+                <td><small class="text-muted">{{ item.created_at|date:"d/m/Y H:i" }}</small></td>
+                <td class="text-end">
+                    <a href="{% url 'delete_password' item.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+    Todavía no has guardado ninguna contraseña.
+    <a href="{% url 'add_password' %}">Añade la primera</a>.
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+    document.querySelectorAll(".btn-reveal").forEach(function (button) {
+        button.addEventListener("click", async function () {
+            const row = button.closest("tr");
+            const cell = row.querySelector(".password-cell");
+            const revealUrl = row.getAttribute("data-reveal-url");
+
+            // Si ya está visible, la volvemos a ocultar sin llamar al backend.
+            if (cell.dataset.revealed === "true") {
+                cell.textContent = "••••••••";
+                cell.dataset.revealed = "false";
+                return;
+            }
+
+            button.disabled = true;
+            try {
+                const response = await fetch(revealUrl, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error("No se pudo obtener la contraseña.");
+                }
+                const data = await response.json();
+                cell.textContent = data.password;
+                cell.dataset.revealed = "true";
+            } catch (err) {
+                alert("Error al revelar la contraseña.");
+            } finally {
+                button.disabled = false;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
