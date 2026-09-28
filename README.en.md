@@ -17,6 +17,7 @@ A password manager with security auditing and user authentication, built with **
 
 - [Features](#features)
 - [Conceptual UI overview](#conceptual-ui-overview)
+- [Navigation flow](#navigation-flow)
 - [Architecture](#architecture)
 - [Data model](#data-model)
 - [Project structure](#project-structure)
@@ -58,6 +59,59 @@ No real screenshots are included in the repository (you'd need to run it yoursel
 - **Login / signup**: split-screen layout, a branding panel on the left and the form on the right.
 - **Dashboard**: dark sidebar, stat cards up top, a credentials table with search, strength badges, and reveal/copy/delete buttons.
 - **Add password**: a generator panel (length slider + option chips) kept visually separate from the save form.
+
+## Navigation flow
+
+```mermaid
+flowchart TD
+    %% ============================
+    %% PUBLIC PAGES
+    %% ============================
+    A[Home] --> B[Log in]
+    A --> C[Sign up]
+    C --> B
+
+    %% ============================
+    %% PRIVATE DASHBOARD
+    %% ============================
+    B --> H[Dashboard]
+    H --> H0[Stats: total, average strength, weak count]
+
+    %% SEARCH AND MANAGEMENT
+    H --> S[Search by site or username]
+    H --> V[Reveal password]
+    V --> V1[Copy to clipboard]
+    H --> D[Delete password]
+    D --> D1[Confirm deletion]
+    D1 --> H
+
+    %% ADD PASSWORD
+    H --> N[Add password]
+    N --> N1[Password generator]
+    N1 --> N2[Length + character types]
+    N2 --> N3[Generate with secrets - CSPRNG]
+    N3 --> N4[Fill form field]
+    N --> N5[Save credential]
+    N5 --> N6[Analyze strength server-side]
+    N6 --> N7[Encrypt with Fernet]
+    N7 --> H
+
+    %% ============================
+    %% ADMINISTRATION
+    %% ============================
+    H --> P{Is staff?}
+    P -->|Yes| Q[Django admin panel]
+    P -->|No| H
+
+    Q --> Q1[Manage users]
+    Q --> Q2[View credential metadata]
+    Q2 --> Q2N[No access to plaintext passwords]
+    Q --> Q3[Create superusers]
+
+    %% SESSION
+    H --> X[Log out]
+    X --> B
+```
 
 ## Architecture
 

@@ -17,6 +17,7 @@ Gestor de contraseñas con auditoría de seguridad y autenticación de usuarios,
 
 - [Características](#características)
 - [Capturas conceptuales de la interfaz](#capturas-conceptuales-de-la-interfaz)
+- [Flujo de navegación](#flujo-de-navegación)
 - [Arquitectura](#arquitectura)
 - [Modelo de datos](#modelo-de-datos)
 - [Estructura del proyecto](#estructura-del-proyecto)
@@ -58,6 +59,59 @@ No se incluyen capturas reales en el repositorio (para eso tendrías que ejecuta
 - **Login / registro**: pantalla dividida, panel de marca a la izquierda y formulario a la derecha.
 - **Panel**: barra lateral oscura, tarjetas de estadísticas arriba, tabla de credenciales con búsqueda, badges de fortaleza y botones de revelar/copiar/eliminar.
 - **Añadir contraseña**: panel de generador (slider de longitud + chips de opciones) separado del formulario de guardado.
+
+## Flujo de navegación
+
+```mermaid
+flowchart TD
+    %% ============================
+    %% PÁGINA PÚBLICA
+    %% ============================
+    A[Inicio] --> B[Iniciar sesión]
+    A --> C[Registrarse]
+    C --> B
+
+    %% ============================
+    %% PANEL PRIVADO
+    %% ============================
+    B --> H[Panel / Dashboard]
+    H --> H0[Estadísticas: total, fortaleza media, débiles]
+
+    %% BÚSQUEDA Y GESTIÓN
+    H --> S[Buscar por servicio o usuario]
+    H --> V[Revelar contraseña]
+    V --> V1[Copiar al portapapeles]
+    H --> D[Eliminar contraseña]
+    D --> D1[Confirmar eliminación]
+    D1 --> H
+
+    %% AÑADIR CONTRASEÑA
+    H --> N[Añadir contraseña]
+    N --> N1[Generador de contraseñas]
+    N1 --> N2[Longitud + tipos de carácter]
+    N2 --> N3[Generar con secrets - CSPRNG]
+    N3 --> N4[Rellenar campo del formulario]
+    N --> N5[Guardar credencial]
+    N5 --> N6[Analizar fortaleza en el servidor]
+    N6 --> N7[Cifrar con Fernet]
+    N7 --> H
+
+    %% ============================
+    %% ADMINISTRACIÓN
+    %% ============================
+    H --> P{¿Es staff?}
+    P -->|Sí| Q[Panel admin de Django]
+    P -->|No| H
+
+    Q --> Q1[Gestionar usuarios]
+    Q --> Q2[Ver metadatos de credenciales]
+    Q2 --> Q2N[Sin acceso a contraseñas en texto plano]
+    Q --> Q3[Crear superusuarios]
+
+    %% SESIÓN
+    H --> X[Cerrar sesión]
+    X --> B
+```
 
 ## Arquitectura
 
