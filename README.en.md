@@ -4,7 +4,14 @@
 
 A password manager with security auditing and user authentication, built with **Django 5**, **PostgreSQL 15**, **cryptography (Fernet)** and **Docker**.
 
-`Python 3.10` · `Django 5.0` · `PostgreSQL 15` · `Docker Compose` · `Fernet (AES + HMAC)`
+[![Python Version](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
+[![Django Version](https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![Encryption](https://img.shields.io/badge/Encryption-Fernet_(AES%2BHMAC)-4B0082?style=for-the-badge&logo=letsencrypt&logoColor=white)](https://cryptography.io/en/latest/fernet/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com)
+[![Deploy on Render](https://img.shields.io/badge/Deploy-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
+[![Database on Neon](https://img.shields.io/badge/Database-Neon-00E599?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.com)
 
 ## Table of contents
 
