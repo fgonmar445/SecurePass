@@ -12,6 +12,7 @@ Gestor de contraseñas con auditoría de seguridad y autenticación de usuarios,
 - [Modelo de datos](#modelo-de-datos)
 - [Estructura del proyecto](#estructura-del-proyecto)
 - [Guía de arranque rápido](#guía-de-arranque-rápido)
+- [Despliegue gratuito en Render + Neon](#despliegue-gratuito-en-render--neon)
 - [Rutas de la aplicación](#rutas-de-la-aplicación)
 - [Notas de seguridad](#notas-de-seguridad)
 - [Próximas mejoras](#próximas-mejoras)
@@ -185,6 +186,55 @@ docker-compose logs -f web
 docker-compose down          # detiene los contenedores
 docker-compose down -v       # detiene y borra también el volumen de datos
 ```
+
+## Despliegue gratuito en Render + Neon
+
+Para tener el proyecto vivo en una URL pública sin coste, se despliega el contenedor `web` en **Render** (plan gratuito) y la base de datos en **Neon** (Postgres serverless gratuito, sin caducidad). Son dos servicios independientes, no `docker-compose`: cada uno se despliega por separado y se conectan por variables de entorno.
+
+### 1. Crear la base de datos en Neon
+
+1. Crea una cuenta en [neon.com](https://neon.com) y un proyecto nuevo (elige la región más cercana a donde vaya a estar Render).
+2. En el panel del proyecto, copia la **cadena de conexión** (Connection string). Tiene esta forma:
+   ```
+   postgresql://usuario:password@ep-xxxxx.region.aws.neon.tech/neondb?sslmode=require
+   ```
+3. Puedes usar la base de datos por defecto (`neondb`) o crear una llamada `securepass_db` desde el editor SQL de Neon; en ese caso cambia el nombre en la URL.
+
+### 2. Subir el código a GitHub
+
+Si aún no lo hiciste, sigue los commits de `git_setup.sh` y haz `git push` a un repositorio (puede ser privado, Render puede acceder igualmente).
+
+### 3. Crear el Web Service en Render
+
+1. En [render.com](https://render.com), **New → Web Service** y conecta tu repositorio de GitHub.
+2. En "Environment" elige **Docker** (Render detecta el `Dockerfile` de la raíz automáticamente, no hace falta indicar un build command).
+3. Plan: **Free**.
+4. En "Environment Variables" añade:
+
+   | Variable | Valor |
+   |---|---|
+   | `SECRET_KEY` | Genera una con el comando de la sección anterior, o usa el botón "Generate" de Render |
+   | `FERNET_KEY` | Genera una con `Fernet.generate_key()` y pégala tal cual |
+   | `DEBUG` | `False` |
+   | `DATABASE_URL` | La cadena de conexión que copiaste de Neon en el paso 1 |
+
+   No hace falta definir `ALLOWED_HOSTS` ni `CSRF_TRUSTED_ORIGINS`: `settings.py` detecta la variable `RENDER_EXTERNAL_HOSTNAME` (Render la inyecta sola) y se autoconfigura, incluyendo forzar HTTPS.
+
+5. Guarda y despliega. Render construye la imagen con tu `Dockerfile` y ejecuta `entrypoint.sh`, que espera a que Neon responda, aplica migraciones, recolecta estáticos (servidos con WhiteNoise, sin nginx) y arranca Gunicorn en el puerto que Render indique.
+
+### 4. Crear un superusuario en producción
+
+Desde la pestaña **Shell** de tu servicio en el panel de Render:
+
+```bash
+python manage.py createsuperuser
+```
+
+### 5. Cosas a tener en cuenta
+
+- El plan gratuito de Render duerme el servicio tras un rato sin tráfico; la primera visita después de dormir tarda entre 30 y 60 segundos en responder. Para una entrevista, carga tú la URL un par de minutos antes.
+- Neon escala a cero tras 5 minutos de inactividad, pero se reactiva solo en ~1 segundo al recibir una conexión — no requiere ninguna acción manual, a diferencia de otras alternativas gratuitas.
+- Cada `git push` a la rama conectada vuelve a desplegar automáticamente (Render hace auto-deploy por defecto).
 
 ## Rutas de la aplicación
 

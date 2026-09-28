@@ -11,12 +11,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Dependencias de sistema necesarias para compilar psycopg2 y esperar a Postgres
+# Dependencias de sistema necesarias para compilar psycopg2
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         gcc \
         libpq-dev \
-        netcat-openbsd \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
