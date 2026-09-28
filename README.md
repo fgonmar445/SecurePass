@@ -1,5 +1,7 @@
 # 🔒 SecurePass
 
+🌐 [English version](README.en.md)
+
 Gestor de contraseñas con auditoría de seguridad y autenticación de usuarios, construido con **Django 5**, **PostgreSQL 15**, **cryptography (Fernet)** y **Docker**.
 
 `Python 3.10` · `Django 5.0` · `PostgreSQL 15` · `Docker Compose` · `Fernet (AES + HMAC)`
