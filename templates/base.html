@@ -27,9 +27,11 @@
             <a href="{% url 'add_password' %}" class="sp-nav-link {% if request.resolver_match.url_name == 'add_password' %}active{% endif %}">
                 <i class="bi bi-plus-circle-fill"></i> Añadir contraseña
             </a>
+            {% if user.is_staff %}
             <a href="/admin/" class="sp-nav-link">
                 <i class="bi bi-gear-fill"></i> Administración
             </a>
+            {% endif %}
         </nav>
         <div class="sp-sidebar-footer">
             <div class="sp-user-chip">
