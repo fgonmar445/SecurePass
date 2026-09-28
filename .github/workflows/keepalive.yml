@@ -1,0 +1,19 @@
+name: Keep SecurePass awake
+
+# El plan gratuito de Render duerme el servicio tras ~15 minutos sin
+# tráfico. Este workflow le hace un ping cada 10 minutos para que se
+# mantenga despierto (sin necesitar ningún servicio externo).
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: # permite lanzarlo a mano desde la pestaña "Actions"
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping SecurePass en Render
+        run: |
+          curl -sf https://securepass-38ii.onrender.com/login/ \
+            -o /dev/null \
+            -w "HTTP %{http_code} en %{time_total}s\n"
