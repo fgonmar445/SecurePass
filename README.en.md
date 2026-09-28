@@ -16,7 +16,7 @@ A password manager with security auditing and user authentication, built with **
 ## Table of contents
 
 - [Features](#features)
-- [Conceptual UI overview](#conceptual-ui-overview)
+- [Screenshots](#screenshots)
 - [Navigation flow](#navigation-flow)
 - [Architecture](#architecture)
 - [Data model](#data-model)
@@ -52,13 +52,19 @@ A password manager with security auditing and user authentication, built with **
 **Infrastructure**
 - Containerized deployment with Docker Compose (`web` + `db`), environment variables for every secret, and an `entrypoint.sh` that waits for PostgreSQL before migrating and starting Gunicorn.
 
-## Conceptual UI overview
+## Screenshots
 
-No real screenshots are included in the repository (you'd need to run it yourself to take those), but roughly:
+**Login** — split-screen layout, a branding panel on the left and the form on the right.
+![Login](screenshots/login.png)
 
-- **Login / signup**: split-screen layout, a branding panel on the left and the form on the right.
-- **Dashboard**: dark sidebar, stat cards up top, a credentials table with search, strength badges, and reveal/copy/delete buttons.
-- **Add password**: a generator panel (length slider + option chips) kept visually separate from the save form.
+**Signup**
+![Signup](screenshots/signup.png)
+
+**Dashboard** — stat cards, instant search, strength badges, and reveal/copy/delete buttons.
+![Dashboard](screenshots/dashboard.png)
+
+**Add password** — generator with a length slider and option chips, kept visually separate from the save form.
+![Add password](screenshots/add.png)
 
 ## Navigation flow
 

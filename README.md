@@ -16,7 +16,7 @@ Gestor de contraseñas con auditoría de seguridad y autenticación de usuarios,
 ## Índice
 
 - [Características](#características)
-- [Capturas conceptuales de la interfaz](#capturas-conceptuales-de-la-interfaz)
+- [Capturas de pantalla](#capturas-de-pantalla)
 - [Flujo de navegación](#flujo-de-navegación)
 - [Arquitectura](#arquitectura)
 - [Modelo de datos](#modelo-de-datos)
@@ -52,13 +52,19 @@ Gestor de contraseñas con auditoría de seguridad y autenticación de usuarios,
 **Infraestructura**
 - Despliegue containerizado con Docker Compose (`web` + `db`), variables de entorno para todos los secretos, `entrypoint.sh` que espera a PostgreSQL antes de migrar y arrancar Gunicorn.
 
-## Capturas conceptuales de la interfaz
+## Capturas de pantalla
 
-No se incluyen capturas reales en el repositorio (para eso tendrías que ejecutarlo y hacerlas tú), pero a grandes rasgos:
+**Login** — pantalla dividida, panel de marca a la izquierda y formulario a la derecha.
+![Login](screenshots/login.png)
 
-- **Login / registro**: pantalla dividida, panel de marca a la izquierda y formulario a la derecha.
-- **Panel**: barra lateral oscura, tarjetas de estadísticas arriba, tabla de credenciales con búsqueda, badges de fortaleza y botones de revelar/copiar/eliminar.
-- **Añadir contraseña**: panel de generador (slider de longitud + chips de opciones) separado del formulario de guardado.
+**Registro**
+![Registro](screenshots/signup.png)
+
+**Panel** — tarjetas de estadísticas, búsqueda instantánea, badges de fortaleza y botones de revelar/copiar/eliminar.
+![Panel](screenshots/dashboard.png)
+
+**Añadir contraseña** — generador con slider de longitud y chips de opciones, separado del formulario de guardado.
+![Añadir contraseña](screenshots/add.png)
 
 ## Flujo de navegación
 
