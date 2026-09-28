@@ -115,19 +115,23 @@ flowchart TD
 
 ## Arquitectura
 
-```
-┌────────────┐        HTTP :8000        ┌──────────────────────┐
-│  Navegador │ ───────────────────────▶ │  web (Django+Gunicorn)│
-└────────────┘                          │  - Auth               │
-                                         │  - passwords app      │
-                                         │  - Cifrado Fernet      │
-                                         └──────────┬────────────┘
-                                                     │ SQL (red interna,
-                                                     │ sin puerto expuesto)
-                                         ┌──────────▼────────────┐
-                                         │  db (PostgreSQL 15)    │
-                                         │  volumen persistente   │
-                                         └────────────────────────┘
+```mermaid
+flowchart LR
+    Browser[Navegador]
+
+    subgraph DC["Docker Compose"]
+        direction LR
+        subgraph WEB["web — Django + Gunicorn"]
+            Auth[Auth django.contrib.auth]
+            App[passwords app]
+            Enc[Cifrado Fernet]
+        end
+        DB[("db — PostgreSQL 15<br/>volumen persistente")]
+    end
+
+    Browser -->|"HTTP :8000"| WEB
+    WEB -->|"SQL, red interna<br/>sin puerto expuesto"| DB
+    DB -.->|"healthcheck pg_isready<br/>bloquea el arranque de web"| WEB
 ```
 
 Ambos servicios se orquestan con `docker-compose.yml`. `web` no arranca hasta que el `healthcheck` de `db` (`pg_isready`) confirma que la base de datos está lista.
