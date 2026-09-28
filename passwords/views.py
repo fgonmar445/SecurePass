@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -45,6 +46,18 @@ class DashboardView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return StoredPassword.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
+        total = queryset.count()
+        weak = queryset.filter(strength_score__lte=2).count()
+        avg_score = queryset.aggregate(avg=Avg("strength_score"))["avg"] or 0
+
+        context["total_passwords"] = total
+        context["weak_passwords"] = weak
+        context["avg_strength_percent"] = round((avg_score / 5) * 100) if avg_score else 0
+        return context
 
 
 class AddPasswordView(LoginRequiredMixin, CreateView):

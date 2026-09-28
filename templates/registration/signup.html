@@ -3,51 +3,75 @@
 {% block title %}Registro — SecurePass{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card shadow-sm securepass-card">
-            <div class="card-body p-4">
-                <h1 class="h4 mb-4 text-center">Crear cuenta</h1>
+<div class="sp-auth-wrapper">
+    <div class="sp-auth-panel sp-auth-brand">
+        <div class="sp-auth-brand-inner">
+            <span class="sp-brand-icon-lg"><i class="bi bi-shield-lock-fill"></i></span>
+            <h2>Crea tu bóveda</h2>
+            <p>En menos de un minuto tendrás un espacio cifrado para guardar tus credenciales, con auditoría de fortaleza y generación segura incluidas.</p>
+            <ul class="sp-auth-features">
+                <li><i class="bi bi-check-circle-fill"></i> Cifrado Fernet de cada contraseña guardada</li>
+                <li><i class="bi bi-check-circle-fill"></i> Puntuación de fortaleza automática (1–5)</li>
+                <li><i class="bi bi-check-circle-fill"></i> Revelado protegido, solo bajo demanda</li>
+            </ul>
+        </div>
+    </div>
 
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <div>{{ field.label }}: {{ error }}</div>
-                            {% endfor %}
-                        {% endfor %}
-                        {% for error in form.non_field_errors %}
-                            <div>{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+    <div class="sp-auth-panel sp-auth-form">
+        <div class="sp-auth-card">
+            <h1 class="h3 mb-1 fw-bold">Crear cuenta</h1>
+            <p class="text-muted mb-4">Es gratis y tarda un minuto.</p>
 
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="{{ form.username.id_for_label }}" class="form-label">Usuario</label>
+            {% if form.errors %}
+                <div class="alert alert-danger sp-alert">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div>{{ field.label }}: {{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">Usuario</label>
+                    <div class="sp-input-icon">
+                        <i class="bi bi-person-fill"></i>
                         {{ form.username }}
                     </div>
-                    <div class="mb-3">
-                        <label for="{{ form.email.id_for_label }}" class="form-label">Correo electrónico</label>
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label">Correo electrónico</label>
+                    <div class="sp-input-icon">
+                        <i class="bi bi-envelope-fill"></i>
                         {{ form.email }}
                     </div>
-                    <div class="mb-3">
-                        <label for="{{ form.password1.id_for_label }}" class="form-label">Contraseña</label>
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label">Contraseña</label>
+                    <div class="sp-input-icon">
+                        <i class="bi bi-key-fill"></i>
                         {{ form.password1 }}
-                        <div class="form-text">Mínimo 8 caracteres. Evita contraseñas comunes o solo numéricas.</div>
                     </div>
-                    <div class="mb-3">
-                        <label for="{{ form.password2.id_for_label }}" class="form-label">Confirmar contraseña</label>
+                    <div class="form-text">Mínimo 8 caracteres. Evita contraseñas comunes o solo numéricas.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label">Confirmar contraseña</label>
+                    <div class="sp-input-icon">
+                        <i class="bi bi-key-fill"></i>
                         {{ form.password2 }}
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Crear cuenta</button>
-                </form>
+                </div>
+                <button type="submit" class="btn sp-btn-primary w-100">Crear cuenta <i class="bi bi-arrow-right"></i></button>
+            </form>
 
-                <p class="text-center mt-3 mb-0">
-                    ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
-                </p>
-            </div>
+            <p class="text-center mt-4 mb-0 text-muted">
+                ¿Ya tienes cuenta? <a href="{% url 'login' %}" class="sp-link">Inicia sesión</a>
+            </p>
         </div>
     </div>
 </div>

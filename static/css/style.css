@@ -1,24 +1,364 @@
+/* ===========================================================================
+   SecurePass — Design system
+   Sidebar oscura + contenido claro, acentos cian, tipografía Inter.
+   =========================================================================== */
+
+:root {
+    --sp-navy: #0b1220;
+    --sp-navy-soft: #131c31;
+    --sp-navy-border: #1f2b44;
+    --sp-accent: #22d3ee;
+    --sp-accent-dark: #0891b2;
+    --sp-green: #34d399;
+    --sp-amber: #f59e0b;
+    --sp-red: #f43f5e;
+    --sp-bg: #f3f5f9;
+    --sp-card-bg: #ffffff;
+    --sp-text: #1e293b;
+    --sp-text-muted: #64748b;
+    --sp-radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
 body {
-    background-color: #f4f6f9;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    color: var(--sp-text);
+    background: var(--sp-bg);
+    margin: 0;
 }
 
-.securepass-navbar {
-    background-color: #0d1b2a;
+a { color: inherit; }
+
+/* --------------------------------------------------------------------- */
+/* Shell / Sidebar                                                        */
+/* --------------------------------------------------------------------- */
+.sp-shell {
+    display: flex;
+    min-height: 100vh;
+    background: var(--sp-bg);
 }
 
-.securepass-card {
+.sp-sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, var(--sp-navy) 0%, #0d1626 100%);
+    color: #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.25rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    flex-shrink: 0;
+    border-right: 1px solid var(--sp-navy-border);
+}
+
+.sp-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #fff;
+    margin-bottom: 2rem;
+    padding: 0 .25rem;
+}
+
+.sp-brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--sp-accent), var(--sp-accent-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #04202a;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.sp-nav {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    flex: 1;
+}
+
+.sp-nav-link {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .65rem .85rem;
+    border-radius: 10px;
+    color: #93a2ba;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: .92rem;
+    transition: all .15s ease;
+}
+
+.sp-nav-link i { font-size: 1.05rem; width: 20px; text-align: center; }
+.sp-nav-link:hover { background: rgba(255, 255, 255, .06); color: #fff; }
+.sp-nav-link.active { background: rgba(34, 211, 238, .12); color: var(--sp-accent); }
+
+.sp-sidebar-footer {
+    border-top: 1px solid var(--sp-navy-border);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.sp-user-chip {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .75rem;
+}
+
+.sp-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--sp-accent);
+    color: #04202a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sp-user-meta { display: flex; flex-direction: column; line-height: 1.2; overflow: hidden; }
+.sp-user-name { color: #fff; font-weight: 600; font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sp-user-role { color: #64748b; font-size: .72rem; }
+
+.sp-logout-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--sp-navy-border);
+    color: #cbd5e1;
+    border-radius: 10px;
+    padding: .5rem;
+    font-size: .85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    transition: all .15s ease;
+}
+.sp-logout-btn:hover { background: rgba(244, 63, 94, .12); border-color: var(--sp-red); color: var(--sp-red); }
+
+/* --------------------------------------------------------------------- */
+/* Main / Topbar                                                          */
+/* --------------------------------------------------------------------- */
+.sp-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+.sp-topbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 2rem;
+    background: #fff;
+    border-bottom: 1px solid #e6e9f0;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.sp-page-title { font-size: 1.15rem; font-weight: 700; margin: 0; flex: 1; }
+
+.sp-topbar-badge {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    background: rgba(52, 211, 153, .12);
+    color: #0f9d68;
+    padding: .4rem .75rem;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sp-sidebar-toggle { background: none; border: none; font-size: 1.4rem; color: var(--sp-text); }
+
+.sp-content { padding: 1.75rem 2rem 3rem; }
+
+.sp-alert { border-radius: 12px; border: none; }
+
+/* --------------------------------------------------------------------- */
+/* Stat cards                                                             */
+/* --------------------------------------------------------------------- */
+.sp-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.sp-stat-card {
+    background: var(--sp-card-bg);
+    border-radius: var(--sp-radius);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 1px 12px rgba(15, 23, 42, .04);
+}
+
+.sp-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.sp-stat-icon-blue { background: rgba(34, 211, 238, .14); color: #0891b2; }
+.sp-stat-icon-green { background: rgba(52, 211, 153, .14); color: #0f9d68; }
+.sp-stat-icon-red { background: rgba(244, 63, 94, .12); color: #e11d48; }
+
+.sp-stat-value { display: block; font-size: 1.5rem; font-weight: 800; line-height: 1.2; }
+.sp-stat-label { display: block; font-size: .8rem; color: var(--sp-text-muted); }
+
+/* --------------------------------------------------------------------- */
+/* Panels / table                                                         */
+/* --------------------------------------------------------------------- */
+.sp-panel {
+    background: var(--sp-card-bg);
+    border-radius: var(--sp-radius);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 1px 12px rgba(15, 23, 42, .04);
+    padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.sp-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.sp-search-box { position: relative; flex: 1; min-width: 220px; max-width: 340px; }
+.sp-search-box i { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); color: var(--sp-text-muted); }
+.sp-search-box input {
+    width: 100%;
+    border: 1px solid #e2e6ee;
+    border-radius: 10px;
+    padding: .55rem .85rem .55rem 2.3rem;
+    font-size: .9rem;
+    background: #f8fafc;
+}
+.sp-search-box input:focus { outline: none; border-color: var(--sp-accent); background: #fff; }
+
+.sp-table { margin-bottom: 0; }
+.sp-table thead th {
     border: none;
-    border-radius: 0.75rem;
+    color: var(--sp-text-muted);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-weight: 700;
+    padding-bottom: .75rem;
+}
+.sp-table td { border-top: 1px solid #eef1f6; padding: .85rem .5rem; vertical-align: middle; }
+.sp-table tbody tr:hover { background: #f8fafc; }
+
+.sp-site-cell { display: flex; align-items: center; gap: .6rem; }
+.sp-site-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #334155, #0f172a);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .85rem;
+    flex-shrink: 0;
 }
 
-.securepass-table thead {
-    background-color: #eef1f5;
+.sp-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #e2e6ee;
+    background: #fff;
+    color: var(--sp-text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s ease;
 }
+.sp-icon-btn:hover { background: #f1f5f9; color: var(--sp-text); }
+.sp-icon-btn:disabled { opacity: .4; cursor: not-allowed; }
+.sp-icon-btn-danger:hover { background: rgba(244, 63, 94, .1); border-color: var(--sp-red); color: var(--sp-red); }
 
-.password-cell {
-    letter-spacing: 2px;
+.password-cell { letter-spacing: 2px; min-width: 90px; display: inline-block; }
+
+.sp-badge { display: inline-block; padding: .2rem .55rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
+.sp-badge-1, .sp-badge-2 { background: rgba(244, 63, 94, .12); color: #e11d48; }
+.sp-badge-3 { background: rgba(245, 158, 11, .14); color: #b45309; }
+.sp-badge-4, .sp-badge-5 { background: rgba(52, 211, 153, .14); color: #0f9d68; }
+
+.sp-empty-state { text-align: center; padding: 3rem 1rem; }
+.sp-empty-state i { font-size: 2.4rem; color: #cbd5e1; }
+.sp-empty-state h3 { font-size: 1.05rem; margin: .75rem 0 .25rem; }
+.sp-empty-state p { color: var(--sp-text-muted); margin-bottom: 1.25rem; }
+
+/* --------------------------------------------------------------------- */
+/* Botones / enlaces                                                      */
+/* --------------------------------------------------------------------- */
+.sp-btn-primary {
+    background: linear-gradient(135deg, var(--sp-accent), var(--sp-accent-dark));
+    border: none;
+    color: #04202a;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: .55rem 1.1rem;
 }
+.sp-btn-primary:hover { color: #04202a; filter: brightness(1.05); }
+.sp-link { color: var(--sp-accent-dark); font-weight: 600; text-decoration: none; }
+.sp-link:hover { text-decoration: underline; }
 
+/* --------------------------------------------------------------------- */
+/* Páginas de autenticación                                               */
+/* --------------------------------------------------------------------- */
+.sp-auth-body { margin: 0; }
+.sp-auth-wrapper { min-height: 100vh; display: flex; width: 100%; }
+.sp-auth-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2.5rem; }
+.sp-auth-brand { background: radial-gradient(circle at 30% 20%, #132339 0%, var(--sp-navy) 60%); color: #fff; }
+.sp-auth-brand-inner { max-width: 380px; }
+.sp-brand-icon-lg {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--sp-accent), var(--sp-accent-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #04202a;
+    margin-bottom: 1.25rem;
+}
+.sp-auth-brand-inner h2 { font-weight: 800; margin-bottom: .75rem; }
+.sp-auth-brand-inner p { color: #94a3b8; line-height: 1.6; }
+.sp-auth-features { list-style: none; padding: 0; margin-top: 1.5rem; display: flex; flex-direction: column; gap: .75rem; }
+.sp-auth-features li { display: flex; align-items: center; gap: .6rem; color: #cbd5e1; font-size: .9rem; }
+.sp-auth-features i { color: var(--sp-accent); }
+
+.sp-auth-form { background: #fff; }
+.sp-auth-card { width: 100%; max-width: 380px; }
+.sp-input-icon { position: relative; }
+.sp-input-icon i { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); color: var(--sp-text-muted); }
+.sp-input-icon input { padding-left: 2.3rem; }
+
+/* --------------------------------------------------------------------- */
+/* Barra de fortaleza (mini, en tabla y en formulario)                    */
+/* --------------------------------------------------------------------- */
 .strength-bar {
     width: 100%;
     height: 6px;
@@ -30,35 +370,48 @@ body {
 .strength-bar-fill {
     height: 100%;
     width: 0;
-    transition: width 0.2s ease, background-color 0.2s ease;
+    transition: width .2s ease, background-color .2s ease;
 }
 
-.strength-bar.strength-1 .strength-bar-fill,
-.strength-bar-fill.strength-1 {
-    width: 20%;
-    background-color: #dc3545;
-}
+.strength-bar.strength-1 .strength-bar-fill, .strength-bar-fill.strength-1 { width: 20%; background-color: var(--sp-red); }
+.strength-bar.strength-2 .strength-bar-fill, .strength-bar-fill.strength-2 { width: 40%; background-color: #fd7e14; }
+.strength-bar.strength-3 .strength-bar-fill, .strength-bar-fill.strength-3 { width: 60%; background-color: var(--sp-amber); }
+.strength-bar.strength-4 .strength-bar-fill, .strength-bar-fill.strength-4 { width: 80%; background-color: #6ec207; }
+.strength-bar.strength-5 .strength-bar-fill, .strength-bar-fill.strength-5 { width: 100%; background-color: var(--sp-green); }
 
-.strength-bar.strength-2 .strength-bar-fill,
-.strength-bar-fill.strength-2 {
-    width: 40%;
-    background-color: #fd7e14;
-}
+/* --------------------------------------------------------------------- */
+/* Generador de contraseñas                                               */
+/* --------------------------------------------------------------------- */
+.sp-generator-panel { border: 1px dashed #cbd5e1; border-radius: var(--sp-radius); padding: 1.25rem 1.5rem; background: #f8fafc; }
+.sp-generator-header { display: flex; align-items: center; gap: .6rem; font-weight: 700; margin-bottom: .35rem; }
+.sp-generator-header i { color: var(--sp-accent-dark); font-size: 1.1rem; }
 
-.strength-bar.strength-3 .strength-bar-fill,
-.strength-bar-fill.strength-3 {
-    width: 60%;
-    background-color: #ffc107;
+.sp-toggle-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+.sp-toggle-chip {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .4rem .7rem;
+    border-radius: 999px;
+    border: 1px solid #e2e6ee;
+    background: #fff;
+    font-size: .82rem;
+    cursor: pointer;
+    user-select: none;
 }
+.sp-toggle-chip input { accent-color: var(--sp-accent-dark); }
 
-.strength-bar.strength-4 .strength-bar-fill,
-.strength-bar-fill.strength-4 {
-    width: 80%;
-    background-color: #6ec207;
-}
-
-.strength-bar.strength-5 .strength-bar-fill,
-.strength-bar-fill.strength-5 {
-    width: 100%;
-    background-color: #198754;
+/* --------------------------------------------------------------------- */
+/* Responsive                                                             */
+/* --------------------------------------------------------------------- */
+@media (max-width: 991px) {
+    .sp-sidebar {
+        position: fixed;
+        left: -280px;
+        z-index: 50;
+        transition: left .2s ease;
+        box-shadow: 0 0 40px rgba(0, 0, 0, .3);
+    }
+    .sp-sidebar.sp-sidebar-open { left: 0; }
+    .sp-auth-brand { display: none; }
 }

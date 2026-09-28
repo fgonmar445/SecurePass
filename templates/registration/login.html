@@ -3,36 +3,54 @@
 {% block title %}Iniciar sesión — SecurePass{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card shadow-sm securepass-card">
-            <div class="card-body p-4">
-                <h1 class="h4 mb-4 text-center">Iniciar sesión</h1>
+<div class="sp-auth-wrapper">
+    <div class="sp-auth-panel sp-auth-brand">
+        <div class="sp-auth-brand-inner">
+            <span class="sp-brand-icon-lg"><i class="bi bi-shield-lock-fill"></i></span>
+            <h2>SecurePass</h2>
+            <p>Gestor de contraseñas con cifrado simétrico, auditoría de fortaleza y generación segura, pensado para equipos que se toman en serio la seguridad de sus credenciales.</p>
+            <ul class="sp-auth-features">
+                <li><i class="bi bi-lock-fill"></i> Cifrado simétrico Fernet (AES + HMAC)</li>
+                <li><i class="bi bi-graph-up-arrow"></i> Auditoría de fortaleza en tiempo real</li>
+                <li><i class="bi bi-shuffle"></i> Generador criptográfico de contraseñas</li>
+            </ul>
+        </div>
+    </div>
 
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        Usuario o contraseña incorrectos. Inténtalo de nuevo.
-                    </div>
-                {% endif %}
+    <div class="sp-auth-panel sp-auth-form">
+        <div class="sp-auth-card">
+            <h1 class="h3 mb-1 fw-bold">Bienvenido de nuevo</h1>
+            <p class="text-muted mb-4">Inicia sesión para acceder a tu bóveda.</p>
 
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_username" class="form-label">Usuario</label>
+            {% if form.errors %}
+                <div class="alert alert-danger sp-alert">
+                    Usuario o contraseña incorrectos. Inténtalo de nuevo.
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Usuario</label>
+                    <div class="sp-input-icon">
+                        <i class="bi bi-person-fill"></i>
                         <input type="text" name="username" id="id_username" class="form-control" autofocus required>
                     </div>
-                    <div class="mb-3">
-                        <label for="id_password" class="form-label">Contraseña</label>
+                </div>
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">Contraseña</label>
+                    <div class="sp-input-icon">
+                        <i class="bi bi-key-fill"></i>
                         <input type="password" name="password" id="id_password" class="form-control" required>
                     </div>
-                    <input type="hidden" name="next" value="{{ next }}">
-                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                </form>
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="btn sp-btn-primary w-100">Entrar <i class="bi bi-arrow-right"></i></button>
+            </form>
 
-                <p class="text-center mt-3 mb-0">
-                    ¿No tienes cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a>
-                </p>
-            </div>
+            <p class="text-center mt-4 mb-0 text-muted">
+                ¿No tienes cuenta? <a href="{% url 'signup' %}" class="sp-link">Regístrate aquí</a>
+            </p>
         </div>
     </div>
 </div>
